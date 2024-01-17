@@ -27,20 +27,11 @@ This lab is all hosted within an Azure VM.  The Azure VM allows for nested virtu
 
 The VM has Windows Server 2022 installed and Hyper-V enabled. The template deploys the lab as a Standard D8s v3 (8 vcpus, 32 GiB memory) VM.  The recommendation would be that once you have deployed the lab to scale the Azure VM to a size that makes sense for your intended purpose.  If you are you going to deploy more virtual machines to it then you need to make it larger. 
 
-## Azure VM Host Credentials
-
-To log onto the Azure VM the credentials are: 
-
-**Username**: rootadmin
-**Password**: demo@pass123
-
-_It is recommend that you change this._
-
 ## Lab Details
 
 The ARM template will deploy a virtual machine within Azure and then install Hyper-V within that virtual machine.  It will also download some VHD files and deploy five servers onto that Hyper-V environment. 
 
-The servers are all joined to the domain **tailwindtraders.org**. The login name for the admin of the domain is **tailwindtraders\administrator** and the password is: **Password**: Pa55w.rd1234
+The servers are all joined to the domain **tailwindtraders.org**. The login name for the admin of the domain is **TAILWINDTRADERS\\Administrator** and the password is **Pa55w.rd1234**.
 
 | VM Name | Operating System | Purpose | Processor | Memory | Comments |
 |---|---|---|---|---|---|
@@ -83,7 +74,7 @@ Once the servers are deployed you need to carry out the following configuration 
     
 ## Lab VM Windows Updates
 
-If you are deploying this lab after March 2023 and want to update patches, you can initial this manually.  Alternatively there is a script on the file share **\\FS01\TT-Files\ITScripts\Updates.ps1** that can be ran and force patching.
+If you are deploying this lab after March 2023 and want to update patches, you can initial this manually.  Alternatively there is a script on the file share **\\\\FS01\\TT-Files\\ITScripts\\Updates.ps1** that can be ran and force patching.
 
 ## Lab Use Cases
 This lab has been designed to try and simulate an on-prem infrastructure, with common servers you'd encounter or need.  A domain controller, file server, SQL database, and some web servers. 
@@ -93,13 +84,6 @@ You can spin up this lab and try out some of the following:
 * Configure Azure File Sync and leverage that within a "production" like environment
 * Deploy Azure Migrate and assess the workloads _(note you will have to treat the servers like physical servers as you don't have access to assess the top Hyper-V layer)_
 * Any other use cases you might have... 
-
-## Tutorials
-
-Some tutorials on how to use this lab have been created: 
-
-* [Lab deployment steps](Tutorials/lab-deployment.md)
-* [Use Azure File Shares with the lab](Tutorials/file-server.md)
 
 ## Credits
 The orginal content written by: Sarah Lean
