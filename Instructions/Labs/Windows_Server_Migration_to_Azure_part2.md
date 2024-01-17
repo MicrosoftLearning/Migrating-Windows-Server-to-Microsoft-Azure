@@ -237,7 +237,7 @@ In this task, you will import data about the servers you intend to migrate to Az
 
    > **Note:** Typically, you would download a template **CSV** file and populate it with data applicable to the servers you intend to migrate. In this case, you will use a pre created CSV file that contains the relevant information for **DC01**, **FS01**, and **WEB01** servers. 
 
-1. Open File Explorer and, in the **Documents** folder, create a file named **AzureMigrateImport-01.csv**. Copy into the file the content available at `https://raw.githubusercontent.com/polichtm/Nested_Hyper-V_in_Azure/main/AzureMigrateImport-01.csv` and save the change.
+1. Open File Explorer and, in the **Documents** folder, create a file named **AzureMigrateImport-01.csv**. Copy into the file the content available at `https://raw.githubusercontent.com/MicrosoftLearning/Migrating-Windows-Server-to-Microsoft-Azure/master/Allfiles/Labs/AzureMigrateimport-01.csv` and save the change.
 
    > **Note:** Review the content and verify that it contains information about the three virtual machines representing the on-premises environment.
 

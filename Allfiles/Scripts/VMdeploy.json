@@ -1,0 +1,306 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.15.31.15270",
+      "templateHash": "16975035903354495363"
+    }
+  },
+  "parameters": {
+    "HyperVHostAdminUserName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "HyperVHostAdminPassword": {
+      "type": "securestring",
+      "minLength": 8
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "vnetNewOrExisting": {
+      "type": "string",
+      "allowedValues": [
+        "new",
+        "existing"
+      ],
+      "defaultValue": "new",
+      "metadata": {
+        "description": "Specify whether to provision new vnet or deploy to existing vnet"
+      }
+    }
+  },
+  "variables": {
+    "OnPremVNETName": "OnPremVNET",
+    "OnPremVNETPrefix": "10.0.0.0/16",
+    "OnPremVNETSubnet1Name": "VMHOST",
+    "OnPremVNETSubnet1Prefix": "10.0.0.0/24",
+    "OnPremVNETSubnet2Name": "DNAT",
+    "OnPremVNETSubnet2Prefix": "10.0.2.0/24",
+    "HyperVHostName": "hypervhost",
+    "HyperVHostImagePublisher": "MicrosoftWindowsServer",
+    "HyperVHostImageOffer": "WindowsServer",
+    "HyperVHostWindowsOSVersion": "2022-Datacenter",
+    "HyperVHostVmSize": "Standard_D8s_v3",
+    "HyperVHost_NSG_Name": "[format('{0}-NSG', variables('HyperVHostName'))]",
+    "HyperVHostNicName": "[format('{0}-NIC', variables('HyperVHostName'))]",
+    "HyperVHostNic2Name": "[format('{0}-NIC2', variables('HyperVHostName'))]",
+    "HyperVHostPipName": "[format('{0}-PIP', variables('HyperVHostName'))]",
+    "HyperVHostDnsName": "[concat(variables('HyperVHostName'),uniqueString(resourceGroup().id))]",
+    "HyperVHostConfigURL": "https://github.com/polichtm/Nested_Hyper-V_in_Azure/blob/main/HyperVHostConfig.zip?raw=true",
+    "HyperVHostInstallHyperVScriptFolder": ".",
+    "HyperVHostInstallHyperVScriptFileName": "InstallHyperV.ps1",
+    "HyperVHostInstallHyperVURL": "https://raw.githubusercontent.com/polichtm/Nested_Hyper-V_in_Azure/main/InstallHyperV.ps1"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2022-07-01",
+      "name": "[variables('HyperVHost_NSG_Name')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "Purpose": "LabDeployment"
+      },
+      "properties": {
+        "securityRules": [
+          {
+            "name": "AllowRdpInbound",
+            "properties": {
+              "description": "Allow RDP",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "3389",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 300,
+              "direction": "Inbound"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "condition": "[equals(parameters('vnetNewOrExisting'), 'new')]",
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2022-07-01",
+      "name": "[variables('OnPremVNETName')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "Purpose": "LabDeployment"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('OnPremVNETPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('OnPremVNETSubnet1Name')]",
+            "properties": {
+              "addressPrefix": "[variables('OnPremVNETSubnet1Prefix')]",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('HyperVHost_NSG_Name'))]"
+              }
+            }
+          },
+          {
+            "name": "[variables('OnPremVNETSubnet2Name')]",
+            "properties": {
+              "addressPrefix": "[variables('OnPremVNETSubnet2Prefix')]"
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups', variables('HyperVHost_NSG_Name'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2022-07-01",
+      "name": "[variables('HyperVHostPipName')]",
+      "sku": {
+        "name": "Standard"
+      },
+      "location": "[parameters('location')]",
+      "tags": {
+        "Purpose": "LabDeployment"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Static",
+        "dnsSettings": {
+          "domainNameLabel": "[variables('HyperVHostDnsName')]"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2022-07-01",
+      "name": "[variables('HyperVHostNicName')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "Purpose": "LabDeployment"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "primary": true,
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('HyperVHostPipName'))]"
+              },
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('OnPremVNETName'), variables('OnPremVNETSubnet1Name'))]"
+              }
+            }
+          }
+        ],
+        "enableIPForwarding": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', variables('HyperVHostPipName'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('OnPremVNETName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2022-07-01",
+      "name": "[variables('HyperVHostNic2Name')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "Purpose": "LabDeployment"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "primary": false,
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('OnPremVNETName'), variables('OnPremVNETSubnet2Name'))]"
+              }
+            }
+          }
+        ],
+        "enableIPForwarding": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('OnPremVNETName'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('OnPremVNETName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2022-11-01",
+      "name": "[variables('HyperVHostName')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "Purpose": "LabDeployment"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[variables('HyperVHostVmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[variables('HyperVHostName')]",
+          "adminUsername": "[parameters('HyperVHostAdminUserName')]",
+          "adminPassword": "[parameters('HyperVHostAdminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('HyperVHostImagePublisher')]",
+            "offer": "[variables('HyperVHostImageOffer')]",
+            "sku": "[variables('HyperVHostWindowsOSVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "createOption": "FromImage",
+            "diskSizeGB": 500
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "properties": {
+                "primary": true
+              },
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('HyperVHostNicName'))]"
+            },
+            {
+              "properties": {
+                "primary": false
+              },
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('HyperVHostNic2Name'))]"
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('HyperVHostNicName'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('HyperVHostNic2Name'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('OnPremVNETName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "apiVersion": "2022-11-01",
+      "name": "[format('{0}/{1}', variables('HyperVHostName'), 'InstallHyperV')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "displayName": "Install Hyper-V"
+      },
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "CustomScriptExtension",
+        "typeHandlerVersion": "1.4",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "fileUris": [
+            "[variables('HyperVHostInstallHyperVURL')]"
+          ],
+          "commandToExecute": "[format('powershell -ExecutionPolicy Unrestricted -File {0}/{1}', variables('HyperVHostInstallHyperVScriptFolder'), variables('HyperVHostInstallHyperVScriptFileName'))]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines', variables('HyperVHostName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "apiVersion": "2022-11-01",
+      "name": "[format('{0}/{1}', variables('HyperVHostName'), 'HyperVHostConfig')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "displayName": "HyperVHostConfig"
+      },
+      "properties": {
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.9",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "configuration": {
+            "url": "[concat(variables('HyperVHostConfigURL'))]",
+            "script": "HyperVHostConfig.ps1",
+            "function": "Main"
+          },
+          "configurationArguments": {
+            "nodeName": "[variables('HyperVHostName')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines', variables('HyperVHostName'))]",
+        "[resourceId('Microsoft.Compute/virtualMachines/extensions', variables('HyperVHostName'), 'InstallHyperV')]"
+      ]
+    }
+  ]
+}
