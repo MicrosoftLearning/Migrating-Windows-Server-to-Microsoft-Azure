@@ -1,11 +1,11 @@
 ---
 lab:
     title: 'Migrate on-premises Windows Servers to Azure-based management model by using Azure Arc'
-    module: 'TW-1002.1-2024: Windows Server Migration to Azure Technical Workshop'
+    module: 'TW-1002.1-2024: Migrating Windows Server to Microsoft Azure Technical Workshop'
 ---
 
-# TW-1002.1-2024: Windows Server Migration to Azure
-# Workshop: Windows Server Migration to Azure
+# TW-1002.1-2024: Migrating Windows Server to Microsoft Azure
+# Workshop: Migrating Windows Server to Microsoft Azure 
 # Lab 1: Migrate on-premises Windows Servers to Azure-based management model by using Azure Arc
 
 Total workshop estimated time: 210 minutes
