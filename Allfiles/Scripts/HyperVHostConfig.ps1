@@ -43,7 +43,7 @@ Configuration Main
           }	
           SetScript =
           {
-             $zipDownload = "https://tw10021wsl.blob.core.windows.net/hvvmfiles/HyperVLabVMs.zip"
+             $zipDownload = "https://globaldemandcenterstor.blob.core.windows.net/setupfiles/HyperVLabVMs.zip"
              $downloadedFile = "D:\HyperVLabVMs.zip"
              $vmFolder = "C:\VM"
              Resize-Partition -DiskNumber 0 -PartitionNumber 2 -Size (400GB)

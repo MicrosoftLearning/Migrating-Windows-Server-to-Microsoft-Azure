@@ -43,10 +43,10 @@
     "HyperVHostNic2Name": "[format('{0}-NIC2', variables('HyperVHostName'))]",
     "HyperVHostPipName": "[format('{0}-PIP', variables('HyperVHostName'))]",
     "HyperVHostDnsName": "[concat(variables('HyperVHostName'),uniqueString(resourceGroup().id))]",
-    "HyperVHostConfigURL": "https://github.com/polichtm/Nested_Hyper-V_in_Azure/blob/main/HyperVHostConfig.zip?raw=true",
+    "HyperVHostConfigURL": "https://github.com/MicrosoftLearning/Migrating-Windows-Server-to-Microsoft-Azure/blob/master/Allfiles/Scripts/HyperVHostConfig.zip?raw=true",
     "HyperVHostInstallHyperVScriptFolder": ".",
     "HyperVHostInstallHyperVScriptFileName": "InstallHyperV.ps1",
-    "HyperVHostInstallHyperVURL": "https://raw.githubusercontent.com/polichtm/Nested_Hyper-V_in_Azure/main/InstallHyperV.ps1"
+    "HyperVHostInstallHyperVURL": "https://raw.githubusercontent.com/MicrosoftLearning/Migrating-Windows-Server-to-Microsoft-Azure/master/Allfiles/Scripts/InstallHyperV.ps1"
   },
   "resources": [
     {
