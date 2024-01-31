@@ -1,11 +1,11 @@
 ---
 lab:
     title: 'Migrate Windows Servers workloads by using Azure Migrate'
-    module: 'TW-1002.1-2024: Windows Server Migration to Azure Technical Workshop'
+    module: 'TW-1002.1-2024: Migrating Windows Server to Microsoft Azure'
 ---
 
-# TW-1002.1-2024: Windows Server Migration to Azure
-# Workshop: Windows Server Migration to Azure
+# TW-1002.1-2024: Migrating Windows Server to Microsoft Azure
+# Workshop: Migrating Windows Server to Microsoft Azure
 # Lab 2: Migrate Windows Servers workloads by using Azure Migrate
 
 Total workshop estimated time: 210 minutes
