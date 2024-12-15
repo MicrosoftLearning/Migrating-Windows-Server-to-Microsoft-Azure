@@ -1,0 +1,42 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    }
+  },
+  "variables": {
+    "MigrateTargetVNETName": "MigrateTargetVNET",
+    "MigrateTargetVNETPrefix": "192.168.0.0/20",
+    "MigrateTargetVNETSubnet1Name": "INFRA",
+    "MigrateTargetVNETSubnet1Prefix": "192.168.0.0/24"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2022-07-01",
+      "name": "[variables('MigrateTargetVNETName')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "Purpose": "LabDeployment"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('MigrateTargetVNETPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('MigrateTargetVNETSubnet1Name')]",
+            "properties": {
+              "addressPrefix": "[variables('MigrateTargetVNETSubnet1Prefix')]"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
