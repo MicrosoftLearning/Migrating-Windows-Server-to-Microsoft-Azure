@@ -11,7 +11,10 @@
     "MigrateTargetVNETName": "MigrateTargetVNET",
     "MigrateTargetVNETPrefix": "192.168.0.0/20",
     "MigrateTargetVNETSubnet1Name": "INFRA",
-    "MigrateTargetVNETSubnet1Prefix": "192.168.0.0/24"
+    "MigrateTargetVNETSubnet1Prefix": "192.168.0.0/24",
+    "CustomDNSServers": [
+      "192.168.0.4"
+    ]
   },
   "resources": [
     {
@@ -35,7 +38,10 @@
               "addressPrefix": "[variables('MigrateTargetVNETSubnet1Prefix')]"
             }
           }
-        ]
+        ],
+        "dhcpOptions": {
+          "dnsServers": "[variables('CustomDNSServers')]"
+        }
       }
     }
   ]
