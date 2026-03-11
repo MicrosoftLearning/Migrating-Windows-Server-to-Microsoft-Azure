@@ -1,7 +1,14 @@
 ---
 lab:
-    title: 'Migrate Windows Server file services by using Storage Migration Service'
-    module: 'TW-1002.1-2024: Migrating Windows Server to Microsoft Azure'
+  title: Migrate Windows Server file services by using Storage Migration Service
+  module: 'TW-1002.1-2024: Migrating Windows Server to Microsoft Azure'
+  description: 'Total workshop estimated time: 210 minutes'
+  duration: 210 minutes
+  level: 500
+  islab: true
+  primarytopics:
+  - Windows
+  - Windows Server
 ---
 
 # TW-1002.1-2024: Migrating Windows Server to Microsoft Azure
