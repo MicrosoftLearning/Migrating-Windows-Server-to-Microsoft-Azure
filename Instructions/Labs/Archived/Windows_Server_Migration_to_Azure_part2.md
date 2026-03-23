@@ -4,7 +4,7 @@ lab:
   module: 'TW-1002.1-2024: Migrating Windows Server to Microsoft Azure'
   description: In this task, you will perform additional configuration tasks that should be completed prior to migrating systems running Windows Server to Azure VMs. Most of these tasks are not specific to Azure Migrate, but apply to migration scenarios in general. You will also implement an Azure Storage account used for storing replicated content of disks attached to on-premises servers (which is specific to Azure Migrate).
   duration: 210 minutes
-  level: 500
+  level: 300
   islab: true
   primarytopics:
     - Azure
