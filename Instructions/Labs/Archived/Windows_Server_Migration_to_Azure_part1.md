@@ -4,7 +4,7 @@ lab:
   module: 'TW-1002.1-2024: Migrating Windows Server to Microsoft Azure Technical Workshop'
   description: In this task, you will implement update management of Azure Arc-enabled Windows servers by using Azure Update Manager.
   duration: 210 minutes
-  level: 500
+  level: 300
   islab: true
   primarytopics:
     - Azure
