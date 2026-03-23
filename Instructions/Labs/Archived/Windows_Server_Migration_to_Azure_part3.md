@@ -4,7 +4,7 @@ lab:
   module: 'TW-1002.1-2024: Migrating Windows Server to Microsoft Azure'
   description: In this task, you will configure the Azure Migrate appliance as the Storage migration Service orchestration server. You will start by joining the appliance to the domain hosting the server you intend to migrate. Following the domain join, you will install on the virtual appliance Windows Admin Center and register it with Azure.
   duration: 210 minutes
-  level: 500
+  level: 300
   islab: true
   primarytopics:
     - Azure
