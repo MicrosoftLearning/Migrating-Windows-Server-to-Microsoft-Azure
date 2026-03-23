@@ -1,7 +1,16 @@
 ---
 lab:
-    title: 'Migrate on-premises Windows Servers to Azure-based management model by using Azure Arc'
-    module: 'TW-1002.1-2024: Migrating Windows Server to Microsoft Azure Technical Workshop'
+  title: Migrate on-premises Windows Servers to Azure-based management model by using Azure Arc
+  module: 'TW-1002.1-2024: Migrating Windows Server to Microsoft Azure Technical Workshop'
+  description: In this task, you will implement update management of Azure Arc-enabled Windows servers by using Azure Update Manager.
+  duration: 210 minutes
+  level: 300
+  islab: true
+  primarytopics:
+    - Azure
+    - Azure Arc
+    - Azure Update Manager
+    - Windows
 ---
 
 # TW-1002.1-2024: Migrating Windows Server to Microsoft Azure
